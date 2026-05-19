@@ -1,4 +1,4 @@
-# flutter_application_1
+# SMART CULTO
 
 A new Flutter project.
 
