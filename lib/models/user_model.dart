@@ -1,0 +1,13 @@
+class UserModel {
+  final String name;
+  final String church;
+  final String email;
+  final String password;
+
+  UserModel({
+    required this.name,
+    required this.church,
+    required this.email,
+    required this.password,
+  });
+}

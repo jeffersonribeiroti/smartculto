@@ -1,0 +1,23 @@
+# analysis_options.yaml
+#
+# Configuração do analisador estático do Dart/Flutter.
+# Esta versão não utiliza o pacote flutter_lints.
+
+analyzer:
+  exclude:
+    - build/**
+    - .dart_tool/**
+    - ios/**
+    - android/**
+    - linux/**
+    - macos/**
+    - windows/**
+    - web/**
+
+linter:
+  rules:
+    # Regras opcionais (desative ou ative se quiser)
+    avoid_print: false
+    prefer_const_constructors: false
+    prefer_final_fields: true
+    use_key_in_widget_constructors: true
