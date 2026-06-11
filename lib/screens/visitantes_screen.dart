@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
-class VisitantesScreen extends StatelessWidget {
-  const VisitantesScreen({super.key});
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Visitantes')),
+      appBar: AppBar(title: const Text('Configurações')),
       body: const Center(
-        child: Text('Não há visitantes cadastrados para este culto.'),
+        child: Text(
+          'Versão 1.0.1',
+          style: TextStyle(fontSize: 20),
+        ),
       ),
     );
   }
