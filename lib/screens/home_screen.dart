@@ -7,7 +7,9 @@ import 'profile_screen.dart';
 import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String userRole; // 'admin' ou 'recepcionista'
+
+  const HomeScreen({super.key, this.userRole = 'recepcionista'});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -109,16 +111,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 20),
 
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: _adicionarCulto,
-              icon: const Icon(Icons.add),
-              label: const Text('Adicionar Culto'),
+          if (widget.userRole != 'admin') ...[
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _adicionarCulto,
+                icon: const Icon(Icons.add),
+                label: const Text('Adicionar Culto'),
+              ),
             ),
-          ),
-
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
+          ],
 
           Expanded(
             child: cultos.isEmpty
