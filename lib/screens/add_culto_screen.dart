@@ -36,7 +36,7 @@ class _AddCultoScreenState extends State<AddCultoScreen> {
     }
   }
 
-  Future<void> _selecionarHora() async {
+  Future<void> _selecionarHour() async {
     final TimeOfDay? hora = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -131,7 +131,7 @@ class _AddCultoScreenState extends State<AddCultoScreen> {
 
             // Seleção de Hora
             InkWell(
-              onTap: _selecionarHora,
+              onTap: _selecionarHour,
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
