@@ -75,10 +75,14 @@ class LoginScreen extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
+                        // Determina se é admin pelo e-mail para fins de simulação
+                        final role = emailController.text.trim() == 'admin@smartculto.com' 
+                            ? 'admin' 
+                            : 'recepcionista';
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const HomeScreen(),
+                            builder: (_) => HomeScreen(userRole: role),
                           ),
                         );
                       },
@@ -110,6 +114,9 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
     );
   }
 }
