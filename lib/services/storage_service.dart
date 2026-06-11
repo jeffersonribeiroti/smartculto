@@ -33,4 +33,4 @@ class StorageService {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_cultosKey);
   }
-}
+}  
