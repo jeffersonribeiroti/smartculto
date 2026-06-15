@@ -9,16 +9,20 @@ class AddCultoScreen extends StatefulWidget {
 }
 
 class _AddCultoScreenState extends State<AddCultoScreen> {
-  final TextEditingController _nomeController = TextEditingController();
+  static const List<String> _tiposCulto = [
+    'Culto de Celebração',
+    'Culto de Jovens',
+    'Culto da Família',
+    'Culto de Oração',
+    'Culto de Evangelismo',
+    'Culto de Crianças',
+    'Culto de Doutrina',
+    'Outro',
+  ];
 
+  String? _tipoSelecionado;
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
-
-  @override
-  void dispose() {
-    _nomeController.dispose();
-    super.dispose();
-  }
 
   Future<void> _selecionarData() async {
     final DateTime? data = await showDatePicker(
@@ -28,34 +32,29 @@ class _AddCultoScreenState extends State<AddCultoScreen> {
       lastDate: DateTime(2100),
       locale: const Locale('pt', 'BR'),
     );
-
     if (data != null) {
-      setState(() {
-        _selectedDate = data;
-      });
+      setState(() => _selectedDate = data);
     }
   }
 
-  Future<void> _selecionarHour() async {
+  Future<void> _selecionarHora() async {
     final TimeOfDay? hora = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
-
     if (hora != null) {
-      setState(() {
-        _selectedTime = hora;
-      });
+      setState(() => _selectedTime = hora);
     }
   }
 
   void _salvarCulto() {
-    if (_nomeController.text.trim().isEmpty ||
+    if (_tipoSelecionado == null ||
         _selectedDate == null ||
         _selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Preencha todos os campos.'),
+          backgroundColor: Colors.red,
         ),
       );
       return;
@@ -71,7 +70,8 @@ class _AddCultoScreenState extends State<AddCultoScreen> {
         '${_selectedTime!.minute.toString().padLeft(2, '0')}';
 
     final culto = Culto(
-      nome: _nomeController.text.trim(),
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      tipo: _tipoSelecionado!,
       data: dataFormatada,
       hora: horaFormatada,
     );
@@ -90,21 +90,35 @@ class _AddCultoScreenState extends State<AddCultoScreen> {
         padding: const EdgeInsets.all(24),
         child: ListView(
           children: [
-            TextField(
-              controller: _nomeController,
+            // Dropdown Tipo de Culto
+            DropdownButtonFormField<String>(
+              value: _tipoSelecionado,
+              isExpanded: true,
               decoration: InputDecoration(
-                labelText: 'Nome do Culto',
+                labelText: 'Tipo de Culto',
+                prefixIcon: const Icon(Icons.church),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                prefixIcon: const Icon(Icons.church),
               ),
+              hint: const Text('Selecione o tipo'),
+              items: _tiposCulto.map((tipo) {
+                return DropdownMenuItem<String>(
+                  value: tipo,
+                  child: Text(tipo),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() => _tipoSelecionado = value);
+              },
             ),
+
             const SizedBox(height: 20),
 
             // Seleção de Data
             InkWell(
               onTap: _selecionarData,
+              borderRadius: BorderRadius.circular(12),
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
@@ -114,24 +128,33 @@ class _AddCultoScreenState extends State<AddCultoScreen> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.calendar_today),
+                    const Icon(Icons.calendar_today,
+                        color: Color(0xFF0D47A1)),
                     const SizedBox(width: 12),
                     Text(
                       _selectedDate == null
                           ? 'Selecionar Data'
                           : '${_selectedDate!.day.toString().padLeft(2, '0')}/'
-                            '${_selectedDate!.month.toString().padLeft(2, '0')}/'
-                            '${_selectedDate!.year}',
+                              '${_selectedDate!.month.toString().padLeft(2, '0')}/'
+                              '${_selectedDate!.year}',
+                      style: TextStyle(
+                        color: _selectedDate == null
+                            ? Colors.grey[600]
+                            : Colors.black87,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
+
             const SizedBox(height: 16),
 
             // Seleção de Hora
             InkWell(
-              onTap: _selecionarHour,
+              onTap: _selecionarHora,
+              borderRadius: BorderRadius.circular(12),
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
@@ -141,29 +164,32 @@ class _AddCultoScreenState extends State<AddCultoScreen> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.access_time),
+                    const Icon(Icons.access_time, color: Color(0xFF0D47A1)),
                     const SizedBox(width: 12),
                     Text(
                       _selectedTime == null
                           ? 'Selecionar Hora'
                           : _selectedTime!.format(context),
+                      style: TextStyle(
+                        color: _selectedTime == null
+                            ? Colors.grey[600]
+                            : Colors.black87,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 32),
 
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: _salvarCulto,
                 icon: const Icon(Icons.save),
-                label: const Text('Salvar'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
+                label: const Text('Salvar Culto'),
               ),
             ),
           ],
